@@ -44,7 +44,6 @@ navigator.mediaDevices
   });
 
 socket.on("user-connected", async () => {
-  console.log("user-connected");
   const offer = await pc.createOffer();
   await pc.setLocalDescription(offer);
 
@@ -52,8 +51,6 @@ socket.on("user-connected", async () => {
 });
 
 socket.on("user-offer", async (uid, offer) => {
-  console.log("user-offer");
-
   pc.setRemoteDescription(new RTCSessionDescription(offer));
   const answer = await pc.createAnswer();
   await pc.setLocalDescription(answer);
@@ -62,14 +59,11 @@ socket.on("user-offer", async (uid, offer) => {
 });
 
 socket.on("user-answer", async (uid, answer) => {
-  console.log("user-answer");
   const remoteDesc = new RTCSessionDescription(answer);
   await pc.setRemoteDescription(remoteDesc);
 });
 
 socket.on("user-disconnected", () => {
-  console.log("user-disconnected");
-
   remoteStream = new MediaStream();
 
   if (remoteVideo) remoteVideo.srcObject = remoteStream;
@@ -84,5 +78,3 @@ pc.addEventListener("icecandidate", (event) => {
     socket.emit("new-icecandidate", event.candidate);
   }
 });
-
-socket.on("text", () => console.log("test"));
